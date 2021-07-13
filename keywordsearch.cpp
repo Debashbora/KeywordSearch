@@ -38,25 +38,21 @@ void KeywordSearch::loadTextFile()
 }
 void KeywordSearch::on_pushButton_clicked()
 {
-    QString searchString=ui->lineEdit->text();
-    ui->textEdit->find(searchString, QTextDocument::FindWholeWords);
+   QTextEdit* edit = ui->textEdit;
+  QString content = edit->toPlainText();
+  QString target = ui->lineEdit->text();
 
-
-    int length_of_the_selection=ui->textEdit->toPlainText().length();
-    int begin;
-
-    begin=searchString.indexOf(searchString);
-
-    int end = begin + length_of_the_selection;
-
-    QTextCharFormat fmt;
-
-    fmt.setBackground(Qt::yellow);
-
-    QTextCursor cursor(ui->textEdit->document());
-    cursor.setPosition(begin, QTextCursor::MoveAnchor);
-    cursor.setPosition(end, QTextCursor::KeepAnchor);
+  QTextCharFormat fmt;
+  fmt.setBackground(Qt::Yellow);
+  
+  int start = content.indexOf(target, 0);
+  QTextCursor cursor(edit->document());
+  while(start != -1){
+    cursor.setPosition(start, QTextCursor::MoveAnchor);
+    cursor.setPosition(start + target.size(), QTextCursor::KeepAnchor);
     cursor.setCharFormat(fmt);
+    start = content.indexOf(target, start + 1);
+  }
 
 }
 
